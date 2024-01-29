@@ -1,11 +1,18 @@
-let randomMealUl = document.getElementById("randomMealUl")
+let randomMealUl = document.getElementById("randomMealUl");
+
+let randomBtn = document.getElementById("randomBtn");
+randomBtn.addEventListener("click", () => {
+	console.log("click på knapp")
+	getRandomMeal();
+});
+
 
 function getRandomMeal() {
 	randomMealUl.innerHTML = "";
 	fetch("https://www.themealdb.com/api/json/v1/1/random.php")
 		.then (res => res.json())
 		.then (data => {
-			console.log("meal: ",(data.meals.strMeal))
+			console.log("meal id: ",(data.meals[0]).idMeal);
 			
 				let randomMealLi = document.createElement("li");
 
@@ -18,4 +25,3 @@ function getRandomMeal() {
 		});
 }
 
-getRandomMeal();
