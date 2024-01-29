@@ -1,0 +1,14 @@
+#meal {
+	width: 600px;
+	border: 1px solid green;
+	padding: 25px;
+	margin: 0;
+	
+}
+#randomMealUl{
+	margin: 0;
+	padding: 0;
+}
+li {
+	list-style: none;
+}
