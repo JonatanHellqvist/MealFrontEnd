@@ -1,15 +1,14 @@
 //måste gå att fixa favoriter på något vettigare sätt men fungerar för tillfället
 let data;
 
-
+// let recipeLi = document.getElementById("recipeLi");
 let favoriteRecipes = JSON.parse(localStorage.getItem("favoriteslist")) || [];
+let recipeDiv = document.getElementById("recipeDiv");
+let recipeUl = document.getElementById("recipeUl");
+// let favoritesBtn = document.createElement("button");
+// favoritesBtn.innerText = "Add favorites";
 
-
-let randomMealUl = document.getElementById("randomMealUl");
-let favoritesBtn = document.createElement("button");
-favoritesBtn.innerText = "Add favorites";
-
-favoritesBtn.addEventListener("click", () => addFavorite(data));
+// favoritesBtn.addEventListener("click", () => addFavorite(data));
 
 //spagetti
 function addFavorite(data) {
@@ -24,7 +23,7 @@ function addFavorite(data) {
 //randomknapp
 let randomBtn = document.getElementById("randomBtn")
 randomBtn.addEventListener("click", () => {
-	recipesDiv.innerHTML = "";
+	recipeDiv.innerHTML = "";
 	console.log("click på knapp");
 	getRandomMeal();
 });
@@ -55,33 +54,27 @@ kokbokBtn.addEventListener("click", () => {
 })
 
 function searchRecipe(inputValue) {
-	recipesDiv.innerHTML = "";
+	recipeUl.innerHTML = "";
 	fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${inputValue}`)
 		.then(res => res.json())
 		.then(data =>  {
 			
-			const recipesDiv = document.getElementById("recipesDiv");
-			
 			if (data.meals !== null) {
-
-				let recipeUl = document.createElement("ul");
-				recipesDiv.appendChild(recipeUl);
+		
+				recipeDiv.appendChild(recipeUl);
 				
 				data.meals.forEach(recipe => {
+
 					let recipeLi = document.createElement("li");
-					
-					
 					recipeLi.innerHTML = 
 						`</br><b>Recept:</b> ${recipe.strMeal} <br>
 						<img src="${recipe.strMealThumb}" style="width: 300px; height: 300px"<br><br>`
-					 
-
 					recipeUl.appendChild(recipeLi);
 
 				})
 
 			} else {
-				recipesDiv.innerText=("Hittade inga recept som matchade din sökning")	
+				recipeDiv.innerText=("Hittade inga recept som matchade din sökning")	
 			}
 
 		})
@@ -90,53 +83,48 @@ function searchRecipe(inputValue) {
 
 
 function getRandomMeal() {
-	randomMealUl.innerHTML = "";
+	recipeUl.innerHTML = "";
 	
 	
 	fetch("https://www.themealdb.com/api/json/v1/1/random.php")
 		.then (res => res.json())
 		.then (responsedata => {
 			data=responsedata;
-			console.log("meal id: ",(data.meals[0]).idMeal);
-			
-			
-				let randomMealLi = document.createElement("li");
-
-				randomMealLi.innerHTML = `
-				<b>Recept:</b> ${data.meals[0].strMeal}, <br> 
-				<img src="${data.meals[0].strMealThumb}" style="width: 300px; height: 300px", <br><br>
-				<b>Kategori:</b> ${data.meals[0].strCategory}, <br>
-				<b>Instruktioner:</b> ${data.meals[0].strInstructions}`;
-
-				
-			
-
-				recipesDiv.appendChild(randomMealUl);
-				randomMealUl.appendChild(randomMealLi);
-				randomMealLi.appendChild(favoritesBtn);
+			printRecipe(data)
 		});
 		
 }
 
 function showFavorites() {
-	recipesDiv.innerHTML = "";
-	let recipeUl = document.createElement("ul");
-
+	recipeUl.innerHTML = "";
 	favoriteRecipes.forEach(idMeal => {
 		fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`)
             .then(res => res.json())
             .then(data => {
-				let li = document.createElement("li");
-				li.innerHTML = `
-				<b>Recept:</b> ${data.meals[0].strMeal}, <br> 
-				<img src="${data.meals[0].strMealThumb}" style="width: 300px; height: 300px", <br><br>`;
 				
-				recipeUl.appendChild(li);
-				recipesDiv.appendChild(recipeUl);
+				printRecipe(data);
 			})
 	})
-	console.log(favoriteRecipes)
 
+	console.log(favoriteRecipes)
+}
+
+function printRecipe(data) {
+	recipeDiv.innerHTML = "";
+
+	let recipeLi = document.createElement("li");
+	recipeLi.innerHTML = `
+	<b>Recept:</b> ${data.meals[0].strMeal}, <br> 
+	<img src="${data.meals[0].strMealThumb}" style="width: 300px; height: 300px", <br><br>`;
+	
+	let favoritesBtn = document.createElement("button");
+	favoritesBtn.innerText = "Add favorites";
+	favoritesBtn.addEventListener("click", () => addFavorite(data));
+
+	recipeLi.appendChild(favoritesBtn);
+	recipeUl.appendChild(recipeLi);
+	recipeDiv.appendChild(recipeUl);
+	
 }
 
 
