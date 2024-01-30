@@ -1,8 +1,12 @@
+let favoriteRecipes = JSON.parse(localStorage.getItem("favoriteslist")) || [];
+
+
 let randomMealUl = document.getElementById("randomMealUl");
+let favoritesBtn = document.createElement("button");
+favoritesBtn.innerText = "Add favorites";
 
 //randomknapp
-let randomBtn = document.getElementById("randomBtn");
-
+let randomBtn = document.getElementById("randomBtn")
 randomBtn.addEventListener("click", () => {
 	recipesDiv.innerHTML = "";
 	console.log("click på knapp");
@@ -11,8 +15,7 @@ randomBtn.addEventListener("click", () => {
 
 //searchknapp
 let searchBtn = document.getElementById("searchBtn");
-
-searchBtn.addEventListener("click", ()=>{
+searchBtn.addEventListener("click", () => {
 	let inputValue = document.getElementById("searchInput").value.trim();
 	
 	if (inputValue !== "") {
@@ -25,10 +28,14 @@ searchBtn.addEventListener("click", ()=>{
 	
 })
 
-
-// document.getElementById("searchBtn").addEventListener("click",()=>{
-// 	let inputValue = document.getElementById("searchInput").value
-
+//Kokbokknapp
+let kokbokBtn = document.getElementById("kokBokBtn")
+kokbokBtn.addEventListener("click", () => {
+	recipesDiv.innerHTML = "";
+	localStorage.setItem("favoriteslist", JSON.stringify(favoriteRecipes));
+	
+	showFavorites();
+})
 
 function searchRecipe(inputValue) {
 	recipesDiv.innerHTML = "";
@@ -45,6 +52,7 @@ function searchRecipe(inputValue) {
 				
 				data.meals.forEach(recipe => {
 					let recipeLi = document.createElement("li");
+					
 					
 					recipeLi.innerHTML = 
 						`</br><b>Recept:</b> ${recipe.strMeal} <br>
@@ -66,10 +74,12 @@ function searchRecipe(inputValue) {
 
 function getRandomMeal() {
 	randomMealUl.innerHTML = "";
+	
 	fetch("https://www.themealdb.com/api/json/v1/1/random.php")
 		.then (res => res.json())
 		.then (data => {
 			console.log("meal id: ",(data.meals[0]).idMeal);
+			
 			
 				let randomMealLi = document.createElement("li");
 
@@ -77,10 +87,34 @@ function getRandomMeal() {
 				<img src="${data.meals[0].strMealThumb}" style="width: 300px; height: 300px", <br><br>
 				<b>Kategori:</b> ${data.meals[0].strCategory}, <br>
 				<b>Instruktioner:</b> ${data.meals[0].strInstructions}`;
+
 				
+				favoritesBtn.addEventListener("click", () => {
+					console.log(data.meals[0].idMeal)
+					favoriteRecipes.push(data.meals[0].idMeal)
+				})
+
 				recipesDiv.appendChild(randomMealUl);
 				randomMealUl.appendChild(randomMealLi);
+				randomMealLi.appendChild(favoritesBtn);
 		});
+		
+}
+
+function showFavorites() {
+	recipesDiv.innerHTML = "";
+
+	favoriteRecipes.forEach(idMeal => {
+		fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`)
+            .then(res => res.json())
+            .then(data => {
+				let li = document.createElement("li");
+				li.innerHTML = `<b>Recept:</b> ${data.meals[0].strMeal}`;
+				recipesDiv.appendChild(li);
+			})
+	})
+	console.log(favoriteRecipes)
+
 }
 
 

@@ -6,9 +6,23 @@
 	
 }
 #randomMealUl{
-	margin: 0;
-	padding: 0;
+	/* margin: 25px; */
+	padding: 25px;
+	width: 300px;
+	/* border: 1px solid yellowgreen; */
+
 }
 li {
 	list-style: none;
+	
+}
+
+#recipesDiv li {
+	width: 300px;
+	border: 1px solid black;
+	padding: 25px;
+}
+#recipesDiv {
+	display: grid;
+	margin: 0;
 }
