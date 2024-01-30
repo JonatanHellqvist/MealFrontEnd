@@ -1,4 +1,5 @@
 //måste gå att fixa favoriter på något vettigare sätt men fungerar för tillfället
+//går det lösa utan att lyfta ut den
 let data;
 
 // let recipeLi = document.getElementById("recipeLi");
@@ -15,6 +16,19 @@ function addFavorite(data) {
 	console.log("add to favorites: ", data.meals[0].idMeal);
 	favoriteRecipes.push(data.meals[0].idMeal);
 	localStorage.setItem("favoriteslist", JSON.stringify(favoriteRecipes));
+}
+
+function removeFavorite(data) {
+	console.log("remove from favorites: ", data.meals[0].idMeal);
+	const removeId = favoriteRecipes.indexOf(data.meals[0].idMeal);
+
+	if(removeId != -1) {
+	// favoriteRecipes.splice(favoriteRecipes.indexOf(data.meals[0].idMeal),1);
+	favoriteRecipes.splice(removeId,1)
+	localStorage.setItem("favoriteslist", JSON.stringify(favoriteRecipes));
+	}else {
+		console.log("inte i favorites")
+	}
 }
 
 	
@@ -74,6 +88,12 @@ function searchRecipe(inputValue) {
 					favoritesBtn.innerText = "Add favorites";
 					favoritesBtn.addEventListener("click", () => addFavorite(data));
 
+					
+					let removeFavoritesBtn = document.createElement("button");
+					removeFavoritesBtn.innerText = "Remove favorites";
+					removeFavoritesBtn.addEventListener("click", () => removeFavorite(data));
+
+					recipeLi.appendChild(removeFavoritesBtn);
 					recipeLi.appendChild(favoritesBtn);
 					recipeUl.appendChild(recipeLi);
 
@@ -127,7 +147,12 @@ function printRecipe(data) {
 	favoritesBtn.innerText = "Add favorites";
 	favoritesBtn.addEventListener("click", () => addFavorite(data));
 
+	let removeFavoritesBtn = document.createElement("button");
+	removeFavoritesBtn.innerText = "Remove favorites";
+	removeFavoritesBtn.addEventListener("click", () => removeFavorite(data));
+
 	recipeLi.appendChild(favoritesBtn);
+	recipeLi.appendChild(removeFavoritesBtn);
 	recipeUl.appendChild(recipeLi);
 	recipeDiv.appendChild(recipeUl);
 	
