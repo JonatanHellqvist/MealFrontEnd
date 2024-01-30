@@ -37,7 +37,7 @@ searchBtn.addEventListener("click", () => {
 		searchRecipe(inputValue);
 	}
 	else {
-		recipesDiv.innerText=("Fyll i sökfältet för att söka")
+		recipeDiv.innerText=("Fyll i sökfältet för att söka")
 	}
 	console.log("click på knapp");
 	
@@ -69,6 +69,12 @@ function searchRecipe(inputValue) {
 					recipeLi.innerHTML = 
 						`</br><b>Recept:</b> ${recipe.strMeal} <br>
 						<img src="${recipe.strMealThumb}" style="width: 300px; height: 300px"<br><br>`
+					
+					let favoritesBtn = document.createElement("button");
+					favoritesBtn.innerText = "Add favorites";
+					favoritesBtn.addEventListener("click", () => addFavorite(data));
+
+					recipeLi.appendChild(favoritesBtn);
 					recipeUl.appendChild(recipeLi);
 
 				})
