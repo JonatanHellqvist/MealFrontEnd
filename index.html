@@ -14,13 +14,23 @@
 	</div>
 
 	<div id="buttons">
-		<button id="searchBtn">Sök:</button><input id="searchInput" type="text"><br><br>
+
+		<!-- <form id="searchForm"> <input type="text" id="searchInput">
+			<button id="searchBtn" type="submit">Sök:</button>
+		</form>	 -->
+		<div id="searchContainer">
+			<form>
+				<input id="searchInput" type="text" placeholder="Search" required>
+				<button id="searchBtn" type="button">Search</button>
+			</form>
+		</div>
+
 		<button id="randomBtn">Random Måltid</button>
 		<button id="categoryBtn">Kategori</button>
 		<button id="kokbokBtn">Visa kokbok</button>
 	</div>
 
-	<div id="meal">
+	<div id="recipesDiv">
 		<ul id="randomMealUl"></ul>
 	</div>
 </body>
