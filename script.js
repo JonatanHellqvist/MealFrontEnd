@@ -1,9 +1,25 @@
+//måste gå att fixa favoriter på något vettigare sätt men fungerar för tillfället
+let data;
+
+
 let favoriteRecipes = JSON.parse(localStorage.getItem("favoriteslist")) || [];
 
 
 let randomMealUl = document.getElementById("randomMealUl");
 let favoritesBtn = document.createElement("button");
 favoritesBtn.innerText = "Add favorites";
+
+favoritesBtn.addEventListener("click", () => addFavorite(data));
+
+//spagetti
+function addFavorite(data) {
+	console.log("add to favorites: ", data.meals[0].idMeal);
+	favoriteRecipes.push(data.meals[0].idMeal);
+	localStorage.setItem("favoriteslist", JSON.stringify(favoriteRecipes));
+}
+
+	
+
 
 //randomknapp
 let randomBtn = document.getElementById("randomBtn")
@@ -31,8 +47,9 @@ searchBtn.addEventListener("click", () => {
 //Kokbokknapp
 let kokbokBtn = document.getElementById("kokBokBtn")
 kokbokBtn.addEventListener("click", () => {
-	recipesDiv.innerHTML = "";
-	localStorage.setItem("favoriteslist", JSON.stringify(favoriteRecipes));
+	// recipesDiv.innerHTML = "";
+	
+	localStorage.getItem("favoriteslist", JSON.stringify(favoriteRecipes));
 	
 	showFavorites();
 })
@@ -75,24 +92,24 @@ function searchRecipe(inputValue) {
 function getRandomMeal() {
 	randomMealUl.innerHTML = "";
 	
+	
 	fetch("https://www.themealdb.com/api/json/v1/1/random.php")
 		.then (res => res.json())
-		.then (data => {
+		.then (responsedata => {
+			data=responsedata;
 			console.log("meal id: ",(data.meals[0]).idMeal);
 			
 			
 				let randomMealLi = document.createElement("li");
 
-				randomMealLi.innerHTML = `<b>Recept:</b> ${data.meals[0].strMeal}, <br> 
+				randomMealLi.innerHTML = `
+				<b>Recept:</b> ${data.meals[0].strMeal}, <br> 
 				<img src="${data.meals[0].strMealThumb}" style="width: 300px; height: 300px", <br><br>
 				<b>Kategori:</b> ${data.meals[0].strCategory}, <br>
 				<b>Instruktioner:</b> ${data.meals[0].strInstructions}`;
 
 				
-				favoritesBtn.addEventListener("click", () => {
-					console.log(data.meals[0].idMeal)
-					favoriteRecipes.push(data.meals[0].idMeal)
-				})
+			
 
 				recipesDiv.appendChild(randomMealUl);
 				randomMealUl.appendChild(randomMealLi);
@@ -103,14 +120,19 @@ function getRandomMeal() {
 
 function showFavorites() {
 	recipesDiv.innerHTML = "";
+	let recipeUl = document.createElement("ul");
 
 	favoriteRecipes.forEach(idMeal => {
 		fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`)
             .then(res => res.json())
             .then(data => {
 				let li = document.createElement("li");
-				li.innerHTML = `<b>Recept:</b> ${data.meals[0].strMeal}`;
-				recipesDiv.appendChild(li);
+				li.innerHTML = `
+				<b>Recept:</b> ${data.meals[0].strMeal}, <br> 
+				<img src="${data.meals[0].strMealThumb}" style="width: 300px; height: 300px", <br><br>`;
+				
+				recipeUl.appendChild(li);
+				recipesDiv.appendChild(recipeUl);
 			})
 	})
 	console.log(favoriteRecipes)
@@ -122,7 +144,7 @@ function showFavorites() {
 
 
 
-// FUnkar
+
 
 // document.getElementById("searchBtn").addEventListener("click",()=>{
 // 	let inputValue = document.getElementById("searchInput").value
