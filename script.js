@@ -12,13 +12,34 @@ let recipeUl = document.getElementById("recipeUl");
 // favoritesBtn.addEventListener("click", () => addFavorite(data));
 
 //spagetti
-function addFavorite(data) {
-	console.log("add to favorites: ", data.meals[0].idMeal);
-	favoriteRecipes.push(data.meals[0].idMeal);
-	localStorage.setItem("favoriteslist", JSON.stringify(favoriteRecipes));
+// function addFavorite(data) {
+// 	console.log("add to favorites: ", data.meals[0].idMeal);
+// 	favoriteRecipes.push(data.meals[0].idMeal);
+// 	localStorage.setItem("favoriteslist", JSON.stringify(favoriteRecipes));
 
-	// const addmessage = `<p>Added ${data.meals[0].idMeal} to favorites<p>`
-	recipeDiv.innerHTML = `<p>Added <b>Id:</b> ${data.meals[0].idMeal} <b>Recept:</b> ${data.meals[0].strMeal} to favorites<p>`;
+// 	// const addmessage = `<p>Added ${data.meals[0].idMeal} to favorites<p>`
+// 	recipeDiv.innerHTML = `<p>Added <b>Id:</b> ${data.meals[0].idMeal} <b>Recept:</b> ${data.meals[0].strMeal} to favorites<p>`;
+// }
+
+function addFavorite(data) {
+
+	fetch('http://localhost:8080/meal', {
+		method: 'POST',
+		headers: {
+			'Content-Type' : 'application/json'
+		},
+		body: JSON.stringify({
+			id : data.meals[0].idMeal,
+			name : data.meals[0].strMeal,
+			comment : "test"
+		})
+	})
+		.then(() =>{
+			recipeDiv.innerHTML = `
+			<p>Added <b>Id:</b> ${data.meals[0].idMeal}<b>Recept:</b> ${data.meals[0].strMeal} to favorites<p>`;
+
+			console.log("add to favorites: ", data.meals[0].idMeal);
+		})	
 }
 
 function removeFavorite(data) {
@@ -65,10 +86,7 @@ searchBtn.addEventListener("click", () => {
 //Kokbokknapp
 let kokbokBtn = document.getElementById("kokBokBtn")
 kokbokBtn.addEventListener("click", () => {
-	// recipesDiv.innerHTML = "";
-	
 	localStorage.getItem("favoriteslist", JSON.stringify(favoriteRecipes));
-	
 	showFavorites();
 })
 
@@ -80,8 +98,7 @@ function searchRecipe(inputValue) {
 			
 			if (data.meals !== null) {
 		
-				recipeDiv.appendChild(recipeUl);
-				
+				recipeDiv.appendChild(recipeUl);		
 				data.meals.forEach(recipe => {
 
 					let recipeLi = document.createElement("li");
@@ -94,7 +111,6 @@ function searchRecipe(inputValue) {
 					favoritesBtn.innerText = "Add favorites";
 					favoritesBtn.addEventListener("click", () => addFavorite(data));
 
-					
 					let removeFavoritesBtn = document.createElement("button");
 					removeFavoritesBtn.innerText = "Remove favorites";
 					removeFavoritesBtn.addEventListener("click", () => removeFavorite(data));
@@ -102,13 +118,10 @@ function searchRecipe(inputValue) {
 					recipeLi.appendChild(removeFavoritesBtn);
 					recipeLi.appendChild(favoritesBtn);
 					recipeUl.appendChild(recipeLi);
-
 				})
-
 			} else {
 				recipeDiv.innerText=("Hittade inga recept som matchade din sökning")	
 			}
-
 		})
 }
 
@@ -119,15 +132,12 @@ function getCategories() {
 	fetch("https://www.themealdb.com/api/json/v1/1/categories.php")
 		.then (res => res.json())
 		.then ( data => {
-			
-			
 			//Vänta med denna
 	})
 }
 
 function getRandomMeal() {
 	recipeUl.innerHTML = "";
-	
 	
 	fetch("https://www.themealdb.com/api/json/v1/1/random.php")
 		.then (res => res.json())
@@ -140,6 +150,7 @@ function getRandomMeal() {
 
 function showFavorites() {
 	recipeUl.innerHTML = "";
+
 	favoriteRecipes.forEach(idMeal => {
 		fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`)
             .then(res => res.json())
