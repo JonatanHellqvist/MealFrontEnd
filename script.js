@@ -73,6 +73,10 @@ kokbokBtn.addEventListener("click", () => {
 	// localStorage.getItem("favoriteslist", JSON.stringify(favoriteRecipes));
 	printFavorites();
 })
+let categoryBtn = document.getElementById("categoryBtn")
+categoryBtn.addEventListener("click", () => {
+	printCategories();
+})
 
 function searchRecipe(inputValue) {
 	recipeUl.innerHTML = "";
@@ -97,22 +101,74 @@ function searchRecipe(inputValue) {
 
 					recipeLi.appendChild(favoritesBtn);
 					recipeUl.appendChild(recipeLi);
-				})
+				});
 			} else {
 				recipeDiv.innerText=("Hittade inga recept som matchade din sökning")	
 			}
-		})
+		});
 }
 
-//Vänta med denna
+
 function printCategories() {
 	recipeUl.innerHTML = "";
 
 	fetch("https://www.themealdb.com/api/json/v1/1/categories.php")
 		.then (res => res.json())
-		.then ( data => {
-			//Vänta med denna
-	})
+		.then (data => {
+			data.categories.forEach(category => {
+
+				let categoryLi = document.createElement("li");
+				categoryLi.innerHTML = `
+				<b>Id:</b> ${category.idCategory} <br>
+				</br><b>Kategori:</b> ${category.strCategory} <br>
+				<img src="${category.strCategoryThumb}" style="width: 200px; height: 200px"<br><br>`
+
+				let printCategoryBtn = document.createElement("button");
+				printCategoryBtn.innerText = "Show Category";
+
+				printCategoryBtn.addEventListener("click", () => {
+					recipeUl.innerHTML = "";
+					fetch (`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category.strCategory}`)
+					.then(res => res.json())
+					.then(data => {
+						console.log(data);
+
+						data.meals.forEach(meal => {
+							console.log(category.strCategory);
+							fetch (`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`)
+							.then(res => res.json())
+							.then(data => {
+								console.log(meal.idMeal)
+								
+								let recipeLi = document.createElement("li");
+								recipeLi.innerHTML = 
+								`<b>Id:</b> ${meal.idMeal} <br>
+								</br><b>Recept:</b> ${meal.strMeal} <br>
+								<img src="${meal.strMealThumb}" style="width: 300px; height: 300px"<br><br>`
+
+								let favoritesBtn = document.createElement("button");
+								favoritesBtn.innerText = "Add favorites";
+								favoritesBtn.addEventListener("click", () => addFavorite(data));
+
+								recipeLi.appendChild(favoritesBtn);
+								recipeUl.appendChild(recipeLi);
+							})	
+						});
+					})
+				})
+				categoryLi.appendChild(printCategoryBtn);
+				recipeUl.appendChild(categoryLi);
+				
+			});	
+	});
+}
+
+function printByCategory() {
+
+}
+
+function printById() {
+
 }
 
 function getRandomMeal() {
