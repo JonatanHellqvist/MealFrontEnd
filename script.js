@@ -3,7 +3,7 @@
 let data;
 
 // let recipeLi = document.getElementById("recipeLi");
-let favoriteRecipes = JSON.parse(localStorage.getItem("favoriteslist")) || [];
+// let favoriteRecipes = JSON.parse(localStorage.getItem("favoriteslist")) || [];
 let recipeDiv = document.getElementById("recipeDiv");
 let recipeUl = document.getElementById("recipeUl");
 // let favoritesBtn = document.createElement("button");
@@ -86,8 +86,8 @@ searchBtn.addEventListener("click", () => {
 //Kokbokknapp
 let kokbokBtn = document.getElementById("kokBokBtn")
 kokbokBtn.addEventListener("click", () => {
-	localStorage.getItem("favoriteslist", JSON.stringify(favoriteRecipes));
-	showFavorites();
+	// localStorage.getItem("favoriteslist", JSON.stringify(favoriteRecipes));
+	printFavorites();
 })
 
 function searchRecipe(inputValue) {
@@ -148,19 +148,36 @@ function getRandomMeal() {
 		
 }
 
-function showFavorites() {
-	recipeUl.innerHTML = "";
+// function showFavorites() {
+// 	recipeUl.innerHTML = "";
 
-	favoriteRecipes.forEach(idMeal => {
-		fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`)
-            .then(res => res.json())
-            .then(data => {
+// 	favoriteRecipes.forEach(idMeal => {
+// 		fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`)
+//             .then(res => res.json())
+//             .then(data => {
 				
-				printRecipe(data);
-			})
-	})
+// 				printRecipe(data);
+// 			})
+// 	})
 
-	console.log(favoriteRecipes)
+// 	console.log(favoriteRecipes)
+// }
+
+function printFavorites() {
+	recipeUl.innerHTML = "";
+	
+	fetch(`http://localhost:8080/meals`)
+		.then(res => res.json())
+		.then(data => {
+			console.log(data);
+			data.forEach(recipe => {
+				fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipe.id}`)
+				.then(res => res.json())
+				.then(data => {
+					printRecipe(data);
+			})
+		})	
+	});
 }
 
 function printRecipe(data) {
