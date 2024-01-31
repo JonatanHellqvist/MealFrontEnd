@@ -16,6 +16,9 @@ function addFavorite(data) {
 	console.log("add to favorites: ", data.meals[0].idMeal);
 	favoriteRecipes.push(data.meals[0].idMeal);
 	localStorage.setItem("favoriteslist", JSON.stringify(favoriteRecipes));
+
+	// const addmessage = `<p>Added ${data.meals[0].idMeal} to favorites<p>`
+	recipeDiv.innerHTML = `<p>Added <b>Id:</b> ${data.meals[0].idMeal} <b>Recept:</b> ${data.meals[0].strMeal} to favorites<p>`;
 }
 
 function removeFavorite(data) {
@@ -26,6 +29,8 @@ function removeFavorite(data) {
 	// favoriteRecipes.splice(favoriteRecipes.indexOf(data.meals[0].idMeal),1);
 	favoriteRecipes.splice(removeId,1)
 	localStorage.setItem("favoriteslist", JSON.stringify(favoriteRecipes));
+
+	recipeDiv.innerHTML = `<p>Removed <b>Id:</b> ${data.meals[0].idMeal} <b>Recept:</b> ${data.meals[0].strMeal} from favorites<p>`;
 	}else {
 		console.log("inte i favorites")
 	}
@@ -81,7 +86,8 @@ function searchRecipe(inputValue) {
 
 					let recipeLi = document.createElement("li");
 					recipeLi.innerHTML = 
-						`</br><b>Recept:</b> ${recipe.strMeal} <br>
+						`<b>Id:</b> ${recipe.idMeal} <br>
+						</br><b>Recept:</b> ${recipe.strMeal} <br>
 						<img src="${recipe.strMealThumb}" style="width: 300px; height: 300px"<br><br>`
 					
 					let favoritesBtn = document.createElement("button");
@@ -140,6 +146,7 @@ function printRecipe(data) {
 
 	let recipeLi = document.createElement("li");
 	recipeLi.innerHTML = `
+	<b>Id:</b> ${data.meals[0].idMeal} <br>
 	<b>Recept:</b> ${data.meals[0].strMeal}, <br> 
 	<img src="${data.meals[0].strMealThumb}" style="width: 300px; height: 300px", <br><br>`;
 	
