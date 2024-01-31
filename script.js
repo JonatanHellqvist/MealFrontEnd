@@ -112,7 +112,18 @@ function searchRecipe(inputValue) {
 		})
 }
 
+//Vänta med denna
+function getCategories() {
+	recipeUl.innerHTML = "";
 
+	fetch("https://www.themealdb.com/api/json/v1/1/categories.php")
+		.then (res => res.json())
+		.then ( data => {
+			
+			
+			//Vänta med denna
+	})
+}
 
 function getRandomMeal() {
 	recipeUl.innerHTML = "";
@@ -164,6 +175,8 @@ function printRecipe(data) {
 	recipeDiv.appendChild(recipeUl);
 	
 }
+
+
 
 
 
