@@ -5,6 +5,10 @@ let data;
 
 let recipeDiv = document.getElementById("recipeDiv");
 let recipeUl = document.getElementById("recipeUl");
+// let recipeLi = document.getElementById("recipeLi");
+let imgDiv = document.getElementById("imgDiv");
+let recipeName = document.getElementById("recipeName");
+let imgImg = document.getElementById("imgImg");
 
 function addFavorite(data) {
 
@@ -90,16 +94,27 @@ function searchRecipe(inputValue) {
 				data.meals.forEach(recipe => {
 
 					let recipeLi = document.createElement("li");
-					recipeLi.innerHTML = 
-						`<b>Id:</b> ${recipe.idMeal} <br>
-						</br><b>Recept:</b> ${recipe.strMeal} <br>
-						<img src="${recipe.strMealThumb}" style="width: 300px; height: 300px"<br><br>`
+					recipeLi.setAttribute("id", "recipeLi");
+					recipeLi.innerHTML = `
+						<div id="recipeNameDiv">		
+							<h1 id="recipeName">${data.meals[0].strMeal}</h1> 	
+						</div>
+						<div id="imgDiv">
+							<img id="imgImg" src="${data.meals[0].strMealThumb}">
+						</div>
+						`;
 					
 					let favoritesBtn = document.createElement("button");
 					favoritesBtn.innerText = "Add favorites";
 					favoritesBtn.addEventListener("click", () => addFavorite(data));
+			
+					let recipeInfoBtn = document.createElement("button");
+					recipeInfoBtn.setAttribute("id","recipeInfoBtn");
+					recipeInfoBtn.innerText = "Recipe Info";
+					recipeInfoBtn.addEventListener("click", () => console.log("info"));
 
 					recipeLi.appendChild(favoritesBtn);
+					recipeLi.appendChild(recipeInfoBtn);
 					recipeUl.appendChild(recipeLi);
 				});
 			} else {
@@ -118,6 +133,7 @@ function printCategories() {
 			data.categories.forEach(category => {
 
 				let categoryLi = document.createElement("li");
+				categoryLi.setAttribute("id","recipeLi");
 				categoryLi.innerHTML = `
 				<b>Id:</b> ${category.idCategory} <br>
 				</br><b>Kategori:</b> ${category.strCategory} <br>
@@ -141,16 +157,27 @@ function printCategories() {
 								console.log(meal.idMeal)
 								
 								let recipeLi = document.createElement("li");
-								recipeLi.innerHTML = 
-								`<b>Id:</b> ${meal.idMeal} <br>
-								</br><b>Recept:</b> ${meal.strMeal} <br>
-								<img src="${meal.strMealThumb}" style="width: 300px; height: 300px"<br><br>`
+								recipeLi.setAttribute("id", "recipeLi");
+								recipeLi.innerHTML = `
+									<div id="recipeNameDiv">		
+										<h1 id="recipeName">${data.meals[0].strMeal}</h1> 	
+									</div>
+									<div id="imgDiv">
+										<img id="imgImg" src="${data.meals[0].strMealThumb}">
+									</div>
+									`;
 
 								let favoritesBtn = document.createElement("button");
 								favoritesBtn.innerText = "Add favorites";
 								favoritesBtn.addEventListener("click", () => addFavorite(data));
 
+								let recipeInfoBtn = document.createElement("button");
+								recipeInfoBtn.setAttribute("id","recipeInfoBtn");
+								recipeInfoBtn.innerText = "Recipe Info";
+								recipeInfoBtn.addEventListener("click", () => console.log("info"));
+
 								recipeLi.appendChild(favoritesBtn);
+								recipeLi.appendChild(recipeInfoBtn);
 								recipeUl.appendChild(recipeLi);
 							})	
 						});
@@ -195,11 +222,16 @@ function printFavorites() {
 					.then(res => res.json())
 					.then(data => {
 					
-					let recipeLi = document.createElement("li");
-					recipeLi.innerHTML = `
-					<b>Id:</b> ${data.meals[0].idMeal} <br>
-					<b>Recept:</b> ${data.meals[0].strMeal}, <br> 
-					<img src="${data.meals[0].strMealThumb}" style="width: 300px; height: 300px", <br><br>`;
+						let recipeLi = document.createElement("li");
+						recipeLi.setAttribute("id", "recipeLi");
+						recipeLi.innerHTML = `
+							<div id="recipeNameDiv">		
+								<h1 id="recipeName">${data.meals[0].strMeal}</h1> 	</div>
+							<div id="imgDiv">
+								<img id="imgImg" src="${data.meals[0].strMealThumb}">
+							</div>
+							`;
+							
 
 					let recipeCommentDiv = document.createElement("div");
 					recipeCommentDiv.setAttribute("id", "recipeCommentDiv");
@@ -252,16 +284,29 @@ function printRecipe(data) {
 	recipeDiv.innerHTML = "";
 
 	let recipeLi = document.createElement("li");
+	recipeLi.setAttribute("id", "recipeLi");
 	recipeLi.innerHTML = `
-	<b>Id:</b> ${data.meals[0].idMeal} <br>
-	<b>Recept:</b> ${data.meals[0].strMeal}, <br> 
-	<img src="${data.meals[0].strMealThumb}" style="width: 300px; height: 300px", <br><br>`;
-	
+		<div id="recipeNameDiv">		
+			<h1 id="recipeName">${data.meals[0].strMeal}</h1> 	
+		</div>
+		<div id="imgDiv">
+			<img id="imgImg" src="${data.meals[0].strMealThumb}">
+		</div>
+		`;
+		
 	let favoritesBtn = document.createElement("button");
+	favoritesBtn.setAttribute("id","favoritesBtn");
 	favoritesBtn.innerText = "Add favorites";
 	favoritesBtn.addEventListener("click", () => addFavorite(data));
 
+	let recipeInfoBtn = document.createElement("button");
+	recipeInfoBtn.setAttribute("id","recipeInfoBtn");
+	recipeInfoBtn.innerText = "Recipe Info";
+	recipeInfoBtn.addEventListener("click", () => console.log("info"));
+
+
 	recipeLi.appendChild(favoritesBtn);
+	recipeLi.appendChild(recipeInfoBtn);
 	recipeUl.appendChild(recipeLi);
 	recipeDiv.appendChild(recipeUl);
 	
@@ -314,3 +359,188 @@ function printRecipe(data) {
 // }
 
 // let favoriteRecipes = JSON.parse(localStorage.getItem("favoriteslist")) || [];
+
+
+
+// function printRecipe(data) {
+// 	recipeDiv.innerHTML = "";
+
+// 	// let recipeLi = document.createElement("li");
+// 	// recipeLi.setAttribute("id","recipeLi");
+// 	// recipeLi.innerHTML = `
+// 	// <b>Id:</b> ${data.meals[0].idMeal}
+// 	// <b>Recept:</b> ${data.meals[0].strMeal},  
+// 	// <img src="${data.meals[0].strMealThumb}">, <`;
+	
+// 	let recipeLi = document.getElementById("recipeLi");
+// 	recipeLi.setAttribute("id","recipeLi");
+// 	recipeLi.innerHTML = `
+// 	<div id="recipeNameDiv">
+// 		<h1 id="recipeName">${data.meals[0].strMeal}</h1>
+// 	</div>
+// 	<div id="imgDiv">
+// 		<img id="imgImg" src="${data.meals[0].strMealThumb}">
+// 	</div>`;
+	
+
+// 	let favoritesBtn = document.createElement("button");
+// 	favoritesBtn.innerText = "Add favorites";
+// 	favoritesBtn.addEventListener("click", () => addFavorite(data));
+
+	
+// 	// recipeLi.appendChild(recipeName);
+// 	// recipeLi.appendChild(imgImg);
+// 	recipeLi.appendChild(favoritesBtn);
+// 	recipeUl.appendChild(recipeLi);
+// 	recipeDiv.appendChild(recipeUl);
+	
+	
+// }
+
+
+
+
+
+// function printFavorites() {
+// 	recipeUl.innerHTML = "";
+	
+// 	fetch(`http://localhost:8080/meals`)
+// 		.then(res => res.json())
+// 		.then(data => {
+// 			console.log(data);
+// 			data.forEach(recipe => {
+// 				fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipe.id}`)
+// 					.then(res => res.json())
+// 					.then(data => {
+					
+// 					let recipeLi = document.createElement("li");
+// 					recipeLi.setAttribute("id","recipeLi");
+// 					recipeLi.innerHTML = `
+// 					<b>Id:</b> ${data.meals[0].idMeal} <br>
+// 					<b>Recept:</b> ${data.meals[0].strMeal}, <br> 
+// 					<img src="${data.meals[0].strMealThumb}" style="width: 300px; height: 300px", <br><br>`;
+
+// 					let recipeCommentDiv = document.createElement("div");
+// 					recipeCommentDiv.setAttribute("id", "recipeCommentDiv");
+					
+// 					let recipeComment = document.createElement("p");
+// 					recipeComment.setAttribute("id", "recipeComment");
+					
+// 						if (recipe.comment !== null) {
+// 							recipeComment.innerText = recipe.comment;
+// 						} else {
+// 							recipeComment.innerText = "Write a comment here.."
+// 						}
+					
+// 					let editRecipeComment = document.createElement("button");
+// 					editRecipeComment.innerText = "Edit comment";
+// 					editRecipeComment.addEventListener("click", () => editComment(recipe.id, recipe.comment));
+					
+// 					let removeFavoritesBtn = document.createElement("button");
+// 					removeFavoritesBtn.innerText = "Remove favorite";
+// 					removeFavoritesBtn.addEventListener("click", () => removeFavorite(data));
+
+// 					recipeLi.appendChild(removeFavoritesBtn);
+// 					recipeCommentDiv.appendChild(editRecipeComment);
+// 					recipeLi.appendChild(recipeCommentDiv);
+// 					recipeCommentDiv.appendChild(recipeComment);
+// 					recipeUl.appendChild(recipeLi);
+// 					recipeDiv.appendChild(recipeUl);
+// 					})
+// 			})	
+// 		});
+// }
+
+
+
+
+// function searchRecipe(inputValue) {
+// 	recipeUl.innerHTML = "";
+// 	fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${inputValue}`)
+// 		.then(res => res.json())
+// 		.then(data =>  {
+			
+// 			if (data.meals !== null) {
+		
+// 				recipeDiv.appendChild(recipeUl);		
+// 				data.meals.forEach(recipe => {
+
+// 					let recipeLi = document.createElement("li");
+// 					recipeLi.setAttribute("id","recipeLi");
+// 					recipeLi.innerHTML = 
+// 						`<b>Id:</b> ${recipe.idMeal} <br>
+// 						</br><b>Recept:</b> ${recipe.strMeal} <br>
+// 						<img src="${recipe.strMealThumb}" style="width: 300px; height: 300px"<br><br>`
+					
+// 					let favoritesBtn = document.createElement("button");
+// 					favoritesBtn.innerText = "Add favorites";
+// 					favoritesBtn.addEventListener("click", () => addFavorite(data));
+
+// 					recipeLi.appendChild(favoritesBtn);
+// 					recipeUl.appendChild(recipeLi);
+// 				});
+// 			} else {
+// 				recipeDiv.innerText=("Hittade inga recept som matchade din sökning")	
+// 			}
+// 		});
+// }
+
+
+
+
+
+// function printCategories() {
+// 	recipeUl.innerHTML = "";
+
+// 	fetch("https://www.themealdb.com/api/json/v1/1/categories.php")
+// 		.then (res => res.json())
+// 		.then (data => {
+// 			data.categories.forEach(category => {
+
+// 				let categoryLi = document.createElement("li");
+// 				categoryLi.setAttribute("id","recipeLi");
+// 				categoryLi.innerHTML = `
+// 				<b>Id:</b> ${category.idCategory} <br>
+// 				</br><b>Kategori:</b> ${category.strCategory} <br>
+// 				<img src="${category.strCategoryThumb}" style="width: 200px; height: 200px"<br><br>`
+
+// 				let printCategoryBtn = document.createElement("button");
+// 				printCategoryBtn.innerText = "Show Category";
+
+// 				printCategoryBtn.addEventListener("click", () => {
+// 					recipeUl.innerHTML = "";
+// 					fetch (`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category.strCategory}`)
+// 					.then(res => res.json())
+// 					.then(data => {
+// 						console.log(data);
+
+// 						data.meals.forEach(meal => {
+// 							console.log(category.strCategory);
+// 							fetch (`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`)
+// 							.then(res => res.json())
+// 							.then(data => {
+// 								console.log(meal.idMeal)
+								
+// 								let recipeLi = document.createElement("li");
+// 								recipeLi.setAttribute("id","recipeLi");
+// 								recipeLi.innerHTML = 
+// 								`<b>Id:</b> ${meal.idMeal} <br>
+// 								</br><b>Recept:</b> ${meal.strMeal} <br>
+// 								<img src="${meal.strMealThumb}" style="width: 300px; height: 300px"<br><br>`
+
+// 								let favoritesBtn = document.createElement("button");
+// 								favoritesBtn.innerText = "Add favorites";
+// 								favoritesBtn.addEventListener("click", () => addFavorite(data));
+
+// 								recipeLi.appendChild(favoritesBtn);
+// 								recipeUl.appendChild(recipeLi);
+// 							})	
+// 						});
+// 					})
+// 				})
+// 				categoryLi.appendChild(printCategoryBtn);
+// 				recipeUl.appendChild(categoryLi);
+				
+// 			});	
+// 	});
+// }
