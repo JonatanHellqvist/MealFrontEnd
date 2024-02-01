@@ -97,10 +97,10 @@ function searchRecipe(inputValue) {
 					recipeLi.setAttribute("id", "recipeLi");
 					recipeLi.innerHTML = `
 						<div id="recipeNameDiv">		
-							<h1 id="recipeName">${data.meals[0].strMeal}</h1> 	
+							<h1 id="recipeName">${recipe.strMeal}</h1> 	
 						</div>
 						<div id="imgDiv">
-							<img id="imgImg" src="${data.meals[0].strMealThumb}">
+							<img id="imgImg" src="${recipe.strMealThumb}">
 						</div>
 						`;
 					
