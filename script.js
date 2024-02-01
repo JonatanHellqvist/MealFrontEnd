@@ -113,8 +113,16 @@ function searchRecipe(inputValue) {
 					recipeInfoBtn.innerText = "Recipe Info";
 					recipeInfoBtn.addEventListener("click", () => console.log("info"));
 
-					recipeLi.appendChild(favoritesBtn);
-					recipeLi.appendChild(recipeInfoBtn);
+					let buttonsDiv = document.createElement("div");
+					buttonsDiv.setAttribute("id","buttonsDiv");
+					buttonsDiv.appendChild(favoritesBtn);
+					buttonsDiv.appendChild(recipeInfoBtn);
+
+					buttonsDiv.appendChild(favoritesBtn);
+					buttonsDiv.appendChild(recipeInfoBtn);
+
+					recipeLi.appendChild(buttonsDiv);
+					// recipeLi.appendChild(recipeInfoBtn);
 					recipeUl.appendChild(recipeLi);
 				});
 			} else {
@@ -133,14 +141,23 @@ function printCategories() {
 			data.categories.forEach(category => {
 
 				let categoryLi = document.createElement("li");
-				categoryLi.setAttribute("id","recipeLi");
+				categoryLi.setAttribute("id","categoryLi");
 				categoryLi.innerHTML = `
-				<b>Id:</b> ${category.idCategory} <br>
-				</br><b>Kategori:</b> ${category.strCategory} <br>
-				<img src="${category.strCategoryThumb}" style="width: 200px; height: 200px"<br><br>`
+					<div id="recipeNameDiv">		
+						<h1 id="recipeName">${category.strCategory}</h1> 	
+					</div>
+					<div id="imgDiv">
+						<img id="imgImg" src="${category.strCategoryThumb}">
+						</div>
+					`;
 
 				let printCategoryBtn = document.createElement("button");
 				printCategoryBtn.innerText = "Show Category";
+
+				let categoryButtonsDiv = document.createElement("div");
+				categoryButtonsDiv.setAttribute("id","categorybuttonsDiv");
+				categoryButtonsDiv.appendChild(printCategoryBtn);
+				
 
 				printCategoryBtn.addEventListener("click", () => {
 					recipeUl.innerHTML = "";
@@ -176,14 +193,19 @@ function printCategories() {
 								recipeInfoBtn.innerText = "Recipe Info";
 								recipeInfoBtn.addEventListener("click", () => console.log("info"));
 
-								recipeLi.appendChild(favoritesBtn);
-								recipeLi.appendChild(recipeInfoBtn);
+								let buttonsDiv = document.createElement("div");
+								buttonsDiv.setAttribute("id","buttonsDiv");
+								buttonsDiv.appendChild(favoritesBtn);
+								buttonsDiv.appendChild(recipeInfoBtn);
+
+								
+								recipeLi.appendChild(buttonsDiv);
 								recipeUl.appendChild(recipeLi);
 							})	
 						});
 					})
 				})
-				categoryLi.appendChild(printCategoryBtn);
+				categoryLi.appendChild(categoryButtonsDiv);
 				recipeUl.appendChild(categoryLi);
 				
 			});	
@@ -222,9 +244,9 @@ function printFavorites() {
 					.then(res => res.json())
 					.then(data => {
 					
-						let recipeLi = document.createElement("li");
-						recipeLi.setAttribute("id", "recipeLi");
-						recipeLi.innerHTML = `
+						let favoritesLi = document.createElement("li");
+						favoritesLi.setAttribute("id", "favoritesLi");
+						favoritesLi.innerHTML = `
 							<div id="recipeNameDiv">		
 								<h1 id="recipeName">${data.meals[0].strMeal}</h1> 	</div>
 							<div id="imgDiv">
@@ -235,6 +257,10 @@ function printFavorites() {
 
 					let recipeCommentDiv = document.createElement("div");
 					recipeCommentDiv.setAttribute("id", "recipeCommentDiv");
+
+					let recipeCommentH1 = document.createElement("h1");
+					recipeCommentH1.setAttribute("id","recipeCommentH1");
+					recipeCommentH1.innerText = "Comment";
 					
 					let recipeComment = document.createElement("p");
 					recipeComment.setAttribute("id", "recipeComment");
@@ -253,11 +279,19 @@ function printFavorites() {
 					removeFavoritesBtn.innerText = "Remove favorite";
 					removeFavoritesBtn.addEventListener("click", () => removeFavorite(data));
 
-					recipeLi.appendChild(removeFavoritesBtn);
-					recipeCommentDiv.appendChild(editRecipeComment);
-					recipeLi.appendChild(recipeCommentDiv);
+					
+					let favoritesButtonsDiv = document.createElement("div");
+					favoritesButtonsDiv.setAttribute("id","favoritesButtonsDiv");
+					favoritesButtonsDiv.appendChild(removeFavoritesBtn);
+					favoritesButtonsDiv.appendChild(editRecipeComment);
+
+					
+					// recipeCommentDiv.appendChild(editRecipeComment);
+					favoritesLi.appendChild(recipeCommentDiv);
+					favoritesLi.appendChild(favoritesButtonsDiv);
+					recipeCommentDiv.appendChild(recipeCommentH1);
 					recipeCommentDiv.appendChild(recipeComment);
-					recipeUl.appendChild(recipeLi);
+					recipeUl.appendChild(favoritesLi);
 					recipeDiv.appendChild(recipeUl);
 					})
 			})	
@@ -304,9 +338,13 @@ function printRecipe(data) {
 	recipeInfoBtn.innerText = "Recipe Info";
 	recipeInfoBtn.addEventListener("click", () => console.log("info"));
 
+	let buttonsDiv = document.createElement("div");
+	buttonsDiv.setAttribute("id","buttonsDiv");
+	buttonsDiv.appendChild(favoritesBtn);
+	buttonsDiv.appendChild(recipeInfoBtn);
 
-	recipeLi.appendChild(favoritesBtn);
-	recipeLi.appendChild(recipeInfoBtn);
+	recipeLi.appendChild(buttonsDiv);
+	// recipeLi.appendChild(recipeInfoBtn);
 	recipeUl.appendChild(recipeLi);
 	recipeDiv.appendChild(recipeUl);
 	
