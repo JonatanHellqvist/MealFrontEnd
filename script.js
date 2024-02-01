@@ -10,6 +10,8 @@ let imgDiv = document.getElementById("imgDiv");
 let recipeName = document.getElementById("recipeName");
 let imgImg = document.getElementById("imgImg");
 
+
+
 function addFavorite(data) {
 
 	fetch('http://localhost:8080/meal', {
@@ -82,6 +84,19 @@ categoryBtn.addEventListener("click", () => {
 	printCategories();
 })
 
+// recipeinfo
+let recipeInfoBtn = document.createElement("button");
+	recipeInfoBtn.setAttribute("id","recipeInfoBtn");
+	recipeInfoBtn.innerText = "Recipe Info";
+	recipeInfoBtn.addEventListener("click", () => {
+		recipeUl.innerHTML = "";
+		printRecipeInfo(data);
+	});
+
+// let favoritesBtn = document.createElement("button");
+// 	favoritesBtn.innerText = "Add favorites";
+// 	favoritesBtn.addEventListener("click", () => addFavorite(data));
+
 function searchRecipe(inputValue) {
 	recipeUl.innerHTML = "";
 	fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${inputValue}`)
@@ -134,6 +149,7 @@ function searchRecipe(inputValue) {
 
 function printCategories() {
 	recipeUl.innerHTML = "";
+
 
 	fetch("https://www.themealdb.com/api/json/v1/1/categories.php")
 		.then (res => res.json())
@@ -191,7 +207,11 @@ function printCategories() {
 								let recipeInfoBtn = document.createElement("button");
 								recipeInfoBtn.setAttribute("id","recipeInfoBtn");
 								recipeInfoBtn.innerText = "Recipe Info";
-								recipeInfoBtn.addEventListener("click", () => console.log("info"));
+								recipeInfoBtn.addEventListener("click", () => {
+									recipeUl.innerHTML = "";
+									console.log(data)
+									printRecipeInfo(data);
+								});
 
 								let buttonsDiv = document.createElement("div");
 								buttonsDiv.setAttribute("id","buttonsDiv");
@@ -279,12 +299,21 @@ function printFavorites() {
 					removeFavoritesBtn.innerText = "Remove favorite";
 					removeFavoritesBtn.addEventListener("click", () => removeFavorite(data));
 
+					let recipeInfoBtn = document.createElement("button");
+					recipeInfoBtn.setAttribute("id","recipeInfoBtn");
+					recipeInfoBtn.innerText = "Recipe Info";
+					recipeInfoBtn.addEventListener("click", () => {
+						recipeUl.innerHTML = "";
+						console.log(data)
+						printRecipeInfo(data);
+					});
+
 					
 					let favoritesButtonsDiv = document.createElement("div");
 					favoritesButtonsDiv.setAttribute("id","favoritesButtonsDiv");
 					favoritesButtonsDiv.appendChild(removeFavoritesBtn);
 					favoritesButtonsDiv.appendChild(editRecipeComment);
-
+					favoritesButtonsDiv.appendChild(recipeInfoBtn);
 					
 					// recipeCommentDiv.appendChild(editRecipeComment);
 					favoritesLi.appendChild(recipeCommentDiv);
@@ -333,10 +362,7 @@ function printRecipe(data) {
 	favoritesBtn.innerText = "Add favorites";
 	favoritesBtn.addEventListener("click", () => addFavorite(data));
 
-	let recipeInfoBtn = document.createElement("button");
-	recipeInfoBtn.setAttribute("id","recipeInfoBtn");
-	recipeInfoBtn.innerText = "Recipe Info";
-	recipeInfoBtn.addEventListener("click", () => console.log("info"));
+	
 
 	let buttonsDiv = document.createElement("div");
 	buttonsDiv.setAttribute("id","buttonsDiv");
@@ -351,6 +377,91 @@ function printRecipe(data) {
 }
 
 
+/////////DETALJSIDAN/////////
+
+function printRecipeInfo(data) {
+	recipeDiv.innerHTML = "";
+
+	fetch (`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${data.meals[0].idMeal}`)
+		.then(res => res.json())
+		.then(data => {
+		console.log(data.meals[0].idMeal)
+								
+		let recipeInfoLi = document.createElement("div");
+		recipeInfoLi.setAttribute("id", "recipeInfoLi");
+		recipeInfoLi.innerHTML = `
+			<div id="recipeInfoInfo">
+				<div id="recipeInfoNameDiv">		
+					<h1 id="recipeInfoName">${data.meals[0].strMeal}</h1> 	
+				</div>
+				<div id="imgInfoDiv">
+					<img id="imgInfoImg" src="${data.meals[0].strMealThumb}">
+				</div>
+				<!-- >><div id="recipeInfoCategory">
+					<h1>Kategori: </h1> ${data.meals[0].strCategory}<br>
+					<h1>Ursprung: </h1> <br>
+				</div> -->
+				<div id="recipeInfoInstructions">
+					<h1>Instruktioner: </h1>${data.meals[0].strInstructions} 
+				</div>
+				<div id="recipeInfoIngredients">
+					<ul>
+						<h1>Ingredienser</h1>
+						${ingredientList(data.meals[0])}
+					</ul>
+				</div>
+				<div id="recipeInfoMeasures">
+					<ul>
+						<h1>Mått</h1>
+						${measurementList(data.meals[0])}
+					</ul>
+				</div>
+			</div>	
+			`;
+
+			let favoritesBtn = document.createElement("button");
+			favoritesBtn.innerText = "Add favorites";
+			favoritesBtn.addEventListener("click", () => addFavorite(data));
+
+
+			let buttonsDiv = document.createElement("div");
+			buttonsDiv.setAttribute("id","buttonsDiv");
+			buttonsDiv.appendChild(favoritesBtn);
+			
+
+								
+			recipeInfoLi.appendChild(buttonsDiv);
+			recipeUl.appendChild(recipeInfoLi);
+			recipeDiv.appendChild(recipeUl);
+			})	
+};
+
+function ingredientList(meal) {
+
+	let ingredientsList = "";
+	
+	for  (let i = 1; i <= 20; i++) {
+		let ingredient = meal[`strIngredient${i}`];
+		if(ingredient) {
+			ingredientsList += `<li>${ingredient}</li>`
+		}
+	}
+	return ingredientsList
+}
+
+function measurementList(meal) {
+	let measureList = "";
+	
+	for  (let i = 1; i <= 20; i++) {
+		let measure = meal[`strMeasure${i}`];
+		if(measure) {
+			measureList += `<li>${measure}</li>`
+		}
+	}
+	return measureList
+}
+
+ 
 
 
 //local storage 
