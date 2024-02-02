@@ -62,7 +62,10 @@ searchBtn.addEventListener("click", () => {
 		searchRecipe(inputValue);
 	}
 	else {
-		recipeDiv.innerText=("Fyll i sökfältet för att söka")
+		recipeDiv.innerHTML=`
+		<div id="messageDiv">
+		<p>Fyll i sökfältet för att söka<p>
+		</div>`;
 	}
 	console.log("click på knapp");	
 })
@@ -95,7 +98,7 @@ function searchRecipe(inputValue) {
 	recipeUl.innerHTML = "";
 	recipeDiv.innerHTML = `
 			<div id="messageDiv">
-			<p>Search Results for: ${inputValue}<p>
+			<p>Sökresultat för: ${inputValue}<p>
 			</div>`;
 
 	fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${inputValue}`)
@@ -125,9 +128,11 @@ function searchRecipe(inputValue) {
 					let recipeInfoBtn = document.createElement("button");
 					recipeInfoBtn.setAttribute("id","recipeInfoBtn");
 					recipeInfoBtn.innerText = "Recipe Info";
-
-					recipeInfoBtn.addEventListener("click", () => printRecipeInfo(data)
-					);
+					recipeInfoBtn.addEventListener("click", () => {
+						recipeUl.innerHTML = "";
+						console.log(data);
+						printRecipeInfoSearch(data);
+					});
 
 					let buttonsDiv = document.createElement("div");
 					buttonsDiv.setAttribute("id","buttonsDiv");
@@ -137,9 +142,13 @@ function searchRecipe(inputValue) {
 
 					recipeLi.appendChild(buttonsDiv);
 					recipeUl.appendChild(recipeLi);
+					recipeDiv.appendChild(recipeUl);
 				});
 			} else {
-				recipeDiv.innerText=("Hittade inga recept som matchade din sökning")	
+				recipeDiv.innerHTML=`
+				<div id="messageDiv">
+				<p>Inga matchande resultat för: ${inputValue}<p>
+				</div>`;	
 			}
 		});
 }
@@ -393,6 +402,7 @@ function printRecipeInfo(data) {
 		.then(res => res.json())
 		.then(data => {
 		console.log(data.meals[0].idMeal)
+		
 								
 		let recipeInfoLi = document.createElement("div");
 		recipeInfoLi.setAttribute("id", "recipeInfoLi");
@@ -466,3 +476,63 @@ function measurementList(meal) {
 	}
 	return measureList
 }
+
+function printRecipeInfoSearch(data) {
+	recipeDiv.innerHTML = `
+			<div id="messageDiv">
+			<p>Receptinformation<p>
+			</div>`;
+	console.log(data.idMeal)
+	fetch (`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${data.idMeal}`)
+		.then(res => res.json())
+		.then(recipeData => {
+		console.log(data.idMeal)
+		const recipe = recipeData.meals[0];
+								
+		let recipeInfoLi = document.createElement("div");
+		recipeInfoLi.setAttribute("id", "recipeInfoLi");
+		recipeInfoLi.innerHTML = `
+			
+				<div id="recipeInfoNameDiv">		
+					<h1 id="recipeInfoName">${recipe.strMeal}</h1> 	
+				</div>
+				<div id=recipeInfoInfo>
+					<div id="recipeInfoIngredients">
+						<ul>
+							<h1>Ingredienser</h1>
+							${ingredientList(recipe)}
+						</ul>
+					</div>
+					<div id="imgInfoDiv">
+						<img id="imgInfoImg" src="${recipe.strMealThumb}">
+					</div>
+					<div id="recipeInfoMeasures">
+						<ul>
+							<h1>Mått</h1>
+							${measurementList(recipe)}
+						</ul>
+					</div>
+				</div>
+				<!-- >><div id="recipeInfoCategory">
+					<h1>Kategori: </h1> ${recipe.strCategory}<br>
+					<h1>Ursprung: </h1> <br>
+				</div> -->
+				<div id="recipeInfoInstructions">
+					<h1>Instruktioner: </h1>${recipe.strInstructions} 
+				</div>				
+			`;
+
+			let favoritesBtn = document.createElement("button");
+			favoritesBtn.innerText = "Add favorites";
+			favoritesBtn.addEventListener("click", () => addFavorite(data));
+
+			let infoButtonsDiv = document.createElement("div");
+			infoButtonsDiv.setAttribute("id","infoButtonsDiv");
+			infoButtonsDiv.appendChild(favoritesBtn);
+									
+			recipeInfoLi.appendChild(infoButtonsDiv);
+			recipeUl.appendChild(recipeInfoLi);
+			recipeDiv.appendChild(recipeUl);
+
+			})	
+};
