@@ -42,7 +42,10 @@ button {
 }
 
 #headerText {
-	font-size: 7vh;
+	color: white;
+	font-size: 8vh;
+	margin: 2vh;
+	
 	align-self: center;
 }
 

@@ -60,6 +60,7 @@ searchBtn.addEventListener("click", () => {
 	
 	if (inputValue !== "") {
 		searchRecipe(inputValue);
+		searchInput.value = '';	
 	}
 	else {
 		recipeDiv.innerHTML=`
@@ -67,7 +68,8 @@ searchBtn.addEventListener("click", () => {
 		<p>Fyll i sökfältet för att söka<p>
 		</div>`;
 	}
-	console.log("click på knapp");	
+	console.log("click på knapp");
+	
 })
 
 //Kokbokknapp
@@ -269,7 +271,7 @@ function printFavorites() {
 	recipeUl.innerHTML = "";
 	recipeDiv.innerHTML = `
 			<div id="messageDiv">
-			<p>Dina sparade Recept:<p>
+			<p>Receptfavoriter<p>
 			</div>`;	
 	
 	fetch(`http://localhost:8080/meals`)
