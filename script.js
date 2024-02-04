@@ -72,10 +72,8 @@ searchBtn.addEventListener("click", () => {
 	
 })
 
-//Kokbokknapp
 let kokbokBtn = document.getElementById("kokBokBtn")
 kokbokBtn.addEventListener("click", () => {
-	// localStorage.getItem("favoriteslist", JSON.stringify(favoriteRecipes));
 	printFavorites();
 })
 let categoryBtn = document.getElementById("categoryBtn")
@@ -83,7 +81,6 @@ categoryBtn.addEventListener("click", () => {
 	printCategories();
 })
 
-// recipeinfo
 let recipeInfoBtn = document.createElement("button");
 	recipeInfoBtn.setAttribute("id","recipeInfoBtn");
 	recipeInfoBtn.innerText = "Recipe Info";
@@ -154,7 +151,6 @@ function searchRecipe(inputValue) {
 			}
 		});
 }
-
 
 function printCategories() {
 	recipeUl.innerHTML = "";
@@ -230,8 +226,14 @@ function printCategories() {
 								buttonsDiv.appendChild(favoritesBtn);
 								buttonsDiv.appendChild(recipeInfoBtn);
 
+								recipeDiv.innerHTML = `
+									<div id="messageDiv">
+									<p>Kategori: ${category.strCategory}<p>
+									</div>`;
+
 								recipeLi.appendChild(buttonsDiv);
 								recipeUl.appendChild(recipeLi);
+								recipeDiv.appendChild(recipeUl);
 			
 							})	
 						});
@@ -239,7 +241,8 @@ function printCategories() {
 				})
 				categoryLi.appendChild(categoryButtonsDiv);
 				recipeUl.appendChild(categoryLi);
-				recipeDiv.appendChild(recipeUl);	
+				recipeDiv.appendChild(recipeUl);
+					
 			});	
 	});
 }
